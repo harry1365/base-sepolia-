@@ -108,6 +108,7 @@ function App() {
   const [verifyResult, setVerifyResult] = React.useState("Enter a wallet to verify this credential.");
   const [checkingVerify, setCheckingVerify] = React.useState(false);
   const [shareStatus, setShareStatus] = React.useState("Generate a check-in link for this campaign.");
+  const [claimQr, setClaimQr] = React.useState("");
   const [claimedStates, setClaimedStates] = React.useState<Record<number, boolean>>({});
   const [checkingClaims, setCheckingClaims] = React.useState(false);
 
@@ -128,6 +129,28 @@ function App() {
       setStatus("Claim link loaded. Connect wallet and claim when ready.");
     }
   }, []);
+
+  React.useEffect(() => {
+    const link = makeClaimLink(selectedBadge.id, selectedBadge.code);
+    let active = true;
+
+    import("qrcode")
+      .then(({ default: QRCode }) =>
+        QRCode.toDataURL(link, {
+          color: { dark: "#14213d", light: "#ffffff" },
+          margin: 1,
+          width: 280,
+        }),
+      )
+      .then((qr) => {
+        if (active) setClaimQr(qr);
+      })
+      .catch(() => setClaimQr(""));
+
+    return () => {
+      active = false;
+    };
+  }, [selectedBadge.id, selectedBadge.code]);
 
   function markStep(index: number, state: StepState) {
     setSteps((current) =>
@@ -378,16 +401,22 @@ function App() {
   }
 
   async function copyClaimLink() {
-    const link = new URL(window.location.href);
-    link.searchParams.set("badge", String(selectedBadge.id));
-    link.searchParams.set("code", selectedBadge.code);
+    const link = makeClaimLink(selectedBadge.id, selectedBadge.code);
 
     try {
-      await navigator.clipboard.writeText(link.toString());
+      await navigator.clipboard.writeText(link);
       setShareStatus("Claim link copied. Turn this into a QR code for event check-in.");
     } catch {
-      setShareStatus(link.toString());
+      setShareStatus(link);
     }
+  }
+
+  function makeClaimLink(badgeId: number, code: string) {
+    const link = new URL(window.location.href);
+    link.search = "";
+    link.searchParams.set("badge", String(badgeId));
+    link.searchParams.set("code", code);
+    return link.toString();
   }
 
   function useDemoCode() {
@@ -529,6 +558,10 @@ function App() {
         </div>
 
         <div className="preview-panel">
+          <figure className="credential-story">
+            <img src="/assets/proofpass-credentials.png" alt="Event credentials prepared for gasless ProofPass check-in" />
+          </figure>
+
           <div className="organizer-panel">
             <p className="eyebrow">Organizer campaign</p>
             <h2>{selectedBadge.title}</h2>
@@ -555,6 +588,12 @@ function App() {
               </button>
             </div>
             <p className="field-hint">{shareStatus}</p>
+            {claimQr && (
+              <div className="qr-panel">
+                <img src={claimQr} alt={`${selectedBadge.title} QR claim link`} />
+                <span>Scan to prefill this check-in claim.</span>
+              </div>
+            )}
           </div>
 
           <div className="badge-preview" style={{ "--accent": selectedBadge.accent } as React.CSSProperties}>

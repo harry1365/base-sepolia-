@@ -132,6 +132,7 @@ Demo claim codes from the deploy script:
 - React + Vite
 - Solidity + Hardhat
 - Ethers v6
+- QRCode claim-link generation
 - Base Sepolia
 - UGF Testnet SDK
 - `TYI_MOCK_USD` for gas settlement
@@ -236,6 +237,8 @@ The app shows a deployment banner near the top:
 
 The contract stores badge types and lets each wallet claim each badge once. Each badge can have a claim-code hash and max claim count, which makes the flow closer to a real event credential instead of a public free mint.
 
+Fresh deployments seed self-contained NFT metadata. Each seeded badge stores a `data:application/json;base64,...` metadata URI with an embedded SVG credential image, so the demo does not depend on IPFS hosting tonight.
+
 Main functions:
 
 ```solidity
@@ -271,7 +274,7 @@ This first version is intentionally focused, but these are the main gaps before 
 
 - Users still need `TYI_MOCK_USD`. The faucet itself may require first getting Base Sepolia ETH, so the final pitch must be precise: ProofPass removes ETH from the credential claim flow, not necessarily from initial testnet token preparation.
 - Eligibility is currently based on a shared event code or prefilled claim link. Stronger production versions should use rotating QR codes, per-user invite codes, or organizer signatures.
-- Badge metadata URIs are placeholders and need real JSON/image assets.
+- The already deployed contract from the first test run still has placeholder metadata. Redeploy with the current script before the final claim demo to seed the new embedded metadata.
 - There is no organizer dashboard yet; badges are seeded during deployment.
 - The UGF flow compiles, but the final proof requires a real Base Sepolia deployment and successful end-to-end claim.
 
@@ -281,7 +284,6 @@ Priority order:
 
 1. Deploy the contract to Base Sepolia and test one complete UGF claim.
 2. Verify the UGF faucet flow and confirm Mock USD balance display.
-3. Add generated QR images or camera scanning for event check-ins.
-4. Add real badge metadata and images.
-5. Add a `My Badges` read view.
-6. Add a simple organizer page for creating badge campaigns.
+3. Claim one badge from the QR-generated claim link on the current deployment.
+4. Add camera scanning only if time remains.
+5. Add a simple organizer page for creating badge campaigns if time remains.

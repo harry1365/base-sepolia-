@@ -315,6 +315,21 @@ h1 {
   gap: 18px;
 }
 
+.credential-story {
+  border-radius: 8px;
+  margin: 0;
+  min-height: 220px;
+  overflow: hidden;
+}
+
+.credential-story img {
+  display: block;
+  height: 100%;
+  max-height: 360px;
+  object-fit: cover;
+  width: 100%;
+}
+
 .organizer-panel,
 .verify-panel {
   border: 1px solid #dfe6ef;
@@ -355,6 +370,32 @@ h1 {
   gap: 8px;
   grid-template-columns: 1fr 1fr;
   margin-top: 16px;
+}
+
+.qr-panel {
+  align-items: center;
+  background: #f6f8fb;
+  border: 1px solid #dfe6ef;
+  border-radius: 8px;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 112px 1fr;
+  margin-top: 14px;
+  padding: 12px;
+}
+
+.qr-panel img {
+  background: #ffffff;
+  border-radius: 6px;
+  display: block;
+  height: 112px;
+  width: 112px;
+}
+
+.qr-panel span {
+  color: #14213d;
+  font-weight: 800;
+  line-height: 1.35;
 }
 
 .badge-preview {
@@ -523,6 +564,10 @@ h1 {
   .readiness-panel {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .qr-panel {
+    grid-template-columns: 1fr;
   }
 
   .readiness-actions {

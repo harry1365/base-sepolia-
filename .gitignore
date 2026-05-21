@@ -1,0 +1,43 @@
+# Node modules
+node_modules/
+
+# Build output
+artifacts/
+cache/
+dist/
+deployments/*.json
+!deployments/.gitkeep
+coverage/
+.nyc_output/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs and temporary files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# VS Code metadata
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Hardhat temp
+typechain/
+
+# Generated frontend build output
+build/
+
+# Editor directories
+.idea/
+
+# Local scratch/download folders
+Microsoft/
+ugf-testnet-js-main/

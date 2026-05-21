@@ -268,6 +268,18 @@ Gasless ProofPass turns onchain credential claims into a normal event check-in i
 
 Compared with a normal badge/NFT minter, the important difference is the transaction outcome: a beginner completes a real contract interaction even when they do not hold the destination chain's gas token.
 
+## Verified Demo
+
+The current demo path has been tested end to end on Base Sepolia:
+
+- Deployed contract: `0x707A6177BE3cb757B856Ed768480813ddf2189AE`
+- Claimed credential: Hackathon Builder Pass, badge ID `1`
+- Test wallet: `0xc59880D050DD8C2c6Df83ed152A9c098cE9F4038`
+- Claim transaction: `0xcdb1b68fcba32590afedfa5f1a50bcc539467529ec91271d77068951b4459093`
+- Observed result: UGF auth, quote, TYI Mock USD settlement, execution, and confirmation all completed; BaseScan shows an ERC-721 token transfer from the zero address to the attendee wallet.
+- Contract read result: `hasClaimed(wallet, 1)` returned `true`.
+- Duplicate claim behavior: a second Hackathon Builder Pass claim from the same wallet is blocked as already claimed.
+
 ## Current Weaknesses
 
 This first version is intentionally focused, but these are the main gaps before a strong final demo:
